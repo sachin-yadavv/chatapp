@@ -1,0 +1,6 @@
+# Backend specific
+node_modules/
+.env
+
+# Logs
+npm-debug.log*
