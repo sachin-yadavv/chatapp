@@ -14,7 +14,7 @@ dotenv.config();
  app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://your-frontend-domain.vercel.app"
+    "https://chatapp-pi-tawny.vercel.app"
   ],
   credentials: true
 }));
