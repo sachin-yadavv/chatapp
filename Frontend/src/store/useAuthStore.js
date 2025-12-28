@@ -14,7 +14,7 @@ export const useAuthStore=create((set,get)=>({
 
     checkAuth:async()=>{ 
     try{
-      const res=  await axiosInstance.get("/auth/check");
+      const res=  await axiosInstance.get("/api/auth/check");
       set ({authUser:res.data});
       get().connectSocket();
 
@@ -31,7 +31,7 @@ export const useAuthStore=create((set,get)=>({
 signup: async(data)=>{
     set({ isSigningUp:true});
     try{
-       const res=  await axiosInstance.post("/auth/signup",data);
+       const res=  await axiosInstance.post("/api/auth/signup",data);
        set({authUser:res.data});
        toast.success("Account Created Successfully")
        get().connectSocket();
@@ -49,7 +49,7 @@ signup: async(data)=>{
   login: async (data) => {
     set({ isLoggingIn: true });
     try {
-      const res = await axiosInstance.post("/auth/login", data);
+      const res = await axiosInstance.post("/api/auth/login", data);
       set({ authUser: res.data });
       toast.success("Logged in successfully");
 
@@ -63,7 +63,7 @@ signup: async(data)=>{
 
  logout: async () => {
     try {
-      await axiosInstance.post("/auth/logout");
+      await axiosInstance.post("/api/auth/logout");
       set({ authUser: null });
       toast.success("Logged out successfully");
         get().disconnectSocket();
@@ -77,7 +77,7 @@ signup: async(data)=>{
   updateProfile: async(data)=>{
     set({isUpdatingProfile:true})
     try{
-      const res=await axiosInstance.put("/auth/updateprofile",data);
+      const res=await axiosInstance.put("/api/auth/updateprofile",data);
       set({authUser:res.data});
       toast.success("Profile Updated")
 
@@ -95,11 +95,13 @@ signup: async(data)=>{
 
     if (!authUser || get().socket?.connected) return;
 
-    const socket = io("http://localhost:5000", {
-      query: {
-        userId: authUser._id,
-      },
-    });
+    const socket = io(import.meta.env.VITE_API_URL, {
+     query: {
+    userId: authUser._id,
+  },
+  withCredentials: true,
+   });
+
 
     set({ socket });
 
